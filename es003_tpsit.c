@@ -20,7 +20,6 @@ typedef struct valori {
 
 int main() {
     FILE *fp;
-    int k = 0;
     valori giochi[ARRAYDIM];
     valori* p = giochi;
 
