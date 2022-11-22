@@ -1,79 +1,104 @@
 /*crea  una  lista e la  stampa*/
-#include  <stdio.h>
-#include  <stdlib.h>
-typedef struct  node 
-{
-    int  valore;
-    struct  node* next;
-}Node;
+#include <stdio.h>
+#include <stdlib.h>
 
-void visualizzaStruct(Node *l){
-    while (l != NULL) //fosse NULL vuol dire che siamo arrivati alla fine
+typedef struct node
+{
+    int valore;
+    struct node *next;
+} Node;
+
+void insert_ordered_by_value(Node **head, Node *elemento)
+{
+    Node *curr = *head, *prev = NULL;
+
+    while (curr != NULL)
     {
-        printf("%d - %p \n",l->valore, l->next);
+        if (elemento->valore <= curr->valore)
+        {
+            break;
+        }
+        prev = curr;
+        curr = curr->next;
+    }
+
+    if (prev == NULL)
+    {
+        *head = elemento;
+    }
+    else
+    {
+        prev->next = elemento;
+    }
+
+    elemento->next = curr;
+}
+
+void visualizzaStruct(Node *l)
+{
+    while (l != NULL) // fosse NULL vuol dire che siamo arrivati alla fine
+    {
+        printf("%d - %p \n", l->valore, l->next);
         l = l->next;
     }
 }
 
-void visualizzaLungStruct(Node *l){
+void visualizzaLungStruct(Node *l)
+{
     int cont = 0;
 
-    while (l != NULL) //fosse NULL vuol dire che siamo arrivati alla fine
+    while (l != NULL) // fosse NULL vuol dire che siamo arrivati alla fine
     {
         l = l->next;
-        cont ++;
+        cont++;
     }
     printf("Lunghezza Struct: %d", cont);
 }
 
-void stampaRicorsiva(Node *l){
-    printf("%d - %p \n",l->valore, l->next);
+/*void stampaRicorsiva(Node *l)
+{
+    printf("%d - %p \n", l->valore, l->next);
     if (l->next != NULL)
     {
         printlist(l->next);
     }
-}
+}*/
 
-int stampaRicorsivaCont(Node *l){
-    if(l != NULL){
+int stampaRicorsivaCont(Node *l)
+{
+    if (l != NULL)
+    {
         return stampaRicorsivaCont(l->next) + 1;
     }
     return 0;
 }
 
-int  main()
+int main()
 {
     int n;
-    Node* lista;
-    Node* l;
-    lista=NULL;
+    Node *lista;
+    Node *l;
+    lista = NULL;
     
+
     do
     {
         printf("Inserisci  un  naturale o  -1 per  terminare\n");
-        scanf("%d",&n);
-        if (n>=0) 
-        {
-            if (lista==NULL) /*  prima  iterazione  */ 
-            {
-                lista = (Node*)  malloc(sizeof(Node));
-                l = lista;
-            }
-            else /*  iterazioni  successive  */
-            {
-                l->next = (Node*)  malloc(sizeof(Node));
-                l = l->next;
-            }
-            l->valore = n;
-            l->next = NULL;
+        scanf("%d", &n);
+        
+        if (n != -1){
+            Node *newElement;
+            newElement = (Node*)  malloc(sizeof(Node));
+
+            newElement->valore = n;
+            newElement->next = NULL;
+
+            insert_ordered_by_value(&lista, &newElement);
         }
-    } while (n>=0);
+    } while (n >= 0);
 
     visualizzaStruct(lista);
     visualizzaLungStruct(lista);
 
     printf("\n");
-    free(lista);
-    free(l);
-    return  0;
-    }
+    return 0;
